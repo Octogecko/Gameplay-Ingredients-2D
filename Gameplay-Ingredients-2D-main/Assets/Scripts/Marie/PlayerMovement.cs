@@ -1,6 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,7 +20,8 @@ public class PlayerMovement : MonoBehaviour
     private Collider2D _holeCollider;
 
     private float horizontalMovement = 0;
-    private bool jump = false, isGrounded = false;
+    private float verticalMovement = 0;
+    private bool jump = false, isJumping = false, isGrounded = false, dash = false, isDashing = false, canDash = true;
     
     void Awake()
     {
@@ -33,11 +34,22 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        _animator.SetBool("Walk", (horizontalMovement != 0 && isGrounded));
+        transform.position += new Vector3(horizontalMovement * Time.deltaTime, 0, 0);
+
+        CheckGround();
+    }
+
+    public void OnMovement(InputAction.CallbackContext context)
+    {
+        Vector2 moveInput = context.ReadValue<Vector2>();
+
+        if (moveInput.x < 0f)
         {
             horizontalMovement = -_speed;
             _spriteRenderer.flipX = true;
-        }else if (Input.GetKey(KeyCode.D))
+        }
+        else if (moveInput.x > 0f)
         {
             horizontalMovement = _speed;
             _spriteRenderer.flipX = false;
@@ -46,30 +58,66 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalMovement = 0;
         }
-        
-        _animator.SetBool("Walk", (horizontalMovement != 0 && isGrounded));
-        transform.position += new Vector3(horizontalMovement * Time.deltaTime, 0, 0);
 
-        CheckGround();
-        
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (moveInput.y < 0f)
+        {
+            verticalMovement = -_speed;
+        }
+        else if (moveInput.y > 0f)
+        {
+            verticalMovement = _speed;
+        }
+        else
+        {
+            verticalMovement = 0;
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (isGrounded)
         {
             jump = true;
             isGrounded = false;
             _animator.SetBool("Jump", true);
             _audioPlayer.PlayAudio(SoundFX.Jump);
         }
-        
     }
 
-    private void FixedUpdate()
+    public void OnDash(InputAction.CallbackContext context)
     {
-        
+        if (context.started && canDash)
+        {
+            isDashing = true;
+            canDash = false;
+            dash = true;
+        }
+        Debug.Log(horizontalMovement + " " + verticalMovement + " " + dash);
+    }
+
+    public void FixedUpdate()
+    {
+        if (jump && isDashing)
+        {
+            isJumping = true;
+        }
+
         if (jump)
         {
             _rigidbody.AddForce(new Vector2(0, _jumpStrength), ForceMode2D.Impulse);
             _rigidbody.gravityScale = upGravity;
             jump = false;
+        }
+
+        if (dash)
+        {
+            Vector2 force = new Vector2(horizontalMovement, verticalMovement)*6;
+            if (force.x != 0f && force.y != 0f) force *= 0.707f;
+            _rigidbody.gravityScale = 0;
+            downGravity = 0f;
+            _rigidbody.linearVelocity = force;
+            dash = false;
+            Invoke("StopDash", 0.1f);
         }
 
         if (!isGrounded && _rigidbody.linearVelocity.y < 0)
@@ -120,8 +168,10 @@ public class PlayerMovement : MonoBehaviour
         if (hit)
         {
             isGrounded = true;
+            isJumping = false;
             _animator.SetBool("Jump", false);
             _rigidbody.gravityScale = upGravity;
+            if (!isDashing) canDash = true;
         }
         else {
             isGrounded = false;
@@ -163,5 +213,17 @@ public class PlayerMovement : MonoBehaviour
         checkpoint = newCheckpoint;
     }
 
-
+    private void StopDash()
+    {
+        isDashing = false;
+        downGravity = 5f;
+        if (!isJumping)
+        {
+            _rigidbody.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            _rigidbody.linearVelocityX /= 5;
+        }
+    }
 }

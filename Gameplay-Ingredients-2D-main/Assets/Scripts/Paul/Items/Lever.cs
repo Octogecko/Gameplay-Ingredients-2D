@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Lever : MonoBehaviour
 {
@@ -12,14 +13,19 @@ public class Lever : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && inZone && PlayerInventory.Instance.IsInInventory("LEVERHANDLE") && !repaired)
+        
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started && inZone && PlayerInventory.Instance.IsInInventory("LEVERHANDLE") && !repaired)
         {
             repaired = true;
             GetComponent<SpriteRenderer>().sprite = leverDeactivated;
             InteractionUI.instance.ShowInteraction("Press E to activate the lever");
             PlayerInventory.Instance.RemoveItemFromInventory("LEVERHANDLE");
         }
-        else if (Input.GetKeyDown(KeyCode.E) && inZone && repaired && !activated)
+        else if (context.started && inZone && repaired && !activated)
         {
             activated = true;
             GetComponent<SpriteRenderer>().sprite = leverActivated;
