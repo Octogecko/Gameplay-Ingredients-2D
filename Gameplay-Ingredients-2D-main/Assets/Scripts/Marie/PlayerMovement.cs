@@ -21,8 +21,10 @@ public class PlayerMovement : MonoBehaviour
 
     private float horizontalMovement = 0;
     private float verticalMovement = 0;
-    private bool jump = false, isJumping = false, isGrounded = false, dash = false, isDashing = false, canDash = true;
-    
+    private bool jump = false, isJumping = false, isGrounded = false, dash = false, canDash = true;
+    public bool isDashing = false;
+
+
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
