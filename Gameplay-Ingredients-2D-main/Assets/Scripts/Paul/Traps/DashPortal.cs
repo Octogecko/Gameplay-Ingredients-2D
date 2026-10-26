@@ -13,7 +13,7 @@ public class DashPortal : MonoBehaviour
             collision.gameObject.GetComponent<PlayerLife>().Hurt(damage);
             collision.gameObject.GetComponent<PlayerMovement>().enabled = false;
             collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-            explosionInstance = Instantiate(explosion, transform);
+            explosionInstance = Instantiate(explosion, collision.transform.position, new Quaternion());
             collision.gameObject.GetComponent<PlayerMovement>().InvokeRespawn(0.5f);
             Invoke("DestroyExplosion", 0.5f);
         }
