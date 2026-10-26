@@ -26,7 +26,7 @@ public class PlayerLife : MonoBehaviour
         _audioPlayer.PlayAudio(SoundFX.Hurt);
         UpdateUI();
 
-        if (_life <= 0) // ajout
+        if (_life <= 0)
         {
             Die();
         }
@@ -43,7 +43,7 @@ public class PlayerLife : MonoBehaviour
         lifeUI.fillAmount = (float)_life / maxLife;
     }
 
-    private void Die() // ajout
+    private void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

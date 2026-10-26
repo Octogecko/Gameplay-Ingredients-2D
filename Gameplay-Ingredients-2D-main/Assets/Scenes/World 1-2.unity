@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 704940644}
   - component: {fileID: 704940643}
   - component: {fileID: 704940646}
+  - component: {fileID: 704940647}
   m_Layer: 7
   m_Name: Ground
   m_TagString: Untagged
@@ -4039,13 +4040,32 @@ TilemapCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!251 &704940647
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704940641}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 0
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 180
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
 --- !u!114 &783129253 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1961277008629150637, guid: 670796a59ca9d6347b1b3c0e5ac97d2a, type: 3}
@@ -4300,10 +4320,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1003079075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bb9d2f25dc3adc42bdbbfe78f42861a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2613d997ca66bd24f9c365b620cc71f2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Trap
+  m_EditorClassIdentifier: Assembly-CSharp::DashPortal
   damage: 1
+  explosion: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
 --- !u!1 &1408490438
 GameObject:
   m_ObjectHideFlags: 0

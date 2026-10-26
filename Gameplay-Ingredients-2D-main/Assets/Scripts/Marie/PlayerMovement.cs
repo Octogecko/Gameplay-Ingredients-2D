@@ -94,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
             canDash = false;
             dash = true;
         }
-        Debug.Log(horizontalMovement + " " + verticalMovement + " " + dash);
     }
 
     public void FixedUpdate()
@@ -149,6 +148,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void InvokeRespawn(float time)
+    {
+        Invoke("Respawn", time);
+        Invoke("EnableCharacter", time);
+    }
+
+    private void EnableCharacter()
+    {
+        enabled = true;
+        GetComponent<SpriteRenderer>().enabled = true;
+    }
+
     public void Respawn()
     {
         transform.position = checkpoint.transform.position;
@@ -187,7 +198,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(headTop.position, transform.up, 0.3f, groundLayers);
         if (hit)
         {
-            GetComponent<Collider2D>().enabled = false;
+            //GetComponent<Collider2D>().enabled = false;
             InvokeRepeating("CheckForFalldown", 0, Time.fixedDeltaTime);
         }
     }
