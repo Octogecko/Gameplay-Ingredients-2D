@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (isGrounded)
+        if (context.started && isGrounded)
         {
             jump = true;
             isGrounded = false;
@@ -114,7 +114,9 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector2 force = new Vector2(horizontalMovement, verticalMovement)*6;
             if (force.x != 0f && force.y != 0f) force *= 0.707f;
-            _rigidbody.gravityScale = 0;
+            else if (force.x == 0f && force.y == 0f && GetComponent<SpriteRenderer>().flipX == false) force.x = _speed*6;
+            else if (force.x == 0f && force.y == 0f) force.x = -_speed*6;
+                _rigidbody.gravityScale = 0;
             downGravity = 0f;
             _rigidbody.linearVelocity = force;
             dash = false;
