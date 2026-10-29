@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.VectorGraphics;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class PlayerLife : MonoBehaviour
 {
     [SerializeField] private Image lifeUI;
     [SerializeField] private int maxLife = 5;
+    [SerializeField] private GameObject deathCanvas;
     private int _life;
     private Animator _animator;
     private SoundPlayer _audioPlayer;
@@ -45,6 +47,6 @@ public class PlayerLife : MonoBehaviour
 
     private void Die()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        deathCanvas.SetActive(true);
     }
 }
