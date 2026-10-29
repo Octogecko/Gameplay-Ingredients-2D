@@ -1,8 +1,4 @@
-using System.Runtime.CompilerServices;
-using Unity.VectorGraphics;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerLife : MonoBehaviour
